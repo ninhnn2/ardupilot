@@ -10,7 +10,7 @@ APJ_BOARD_ID 2024
 # crystal frequency
 OSCILLATOR_HZ 8000000
 
-FLASH_SIZE_KB 1024
+FLASH_SIZE_KB 512
 
 # don't allow bootloader to use more than 16k
 FLASH_USE_MAX_KB 16
