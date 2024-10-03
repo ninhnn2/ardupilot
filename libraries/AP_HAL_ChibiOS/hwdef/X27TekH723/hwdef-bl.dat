@@ -1,0 +1,54 @@
+# hw definition file for processing by chibios_pins.py
+# for X27TekH723 bootloader
+
+# MCU class and specific type
+MCU STM32H7xx STM32H723xx
+
+# crystal frequency
+OSCILLATOR_HZ 16000000
+
+# board ID for firmware load
+APJ_BOARD_ID AP_HW_X27TekH723
+
+# flash size
+FLASH_SIZE_KB 1024
+
+# don't allow bootloader to use more than 16k
+#FLASH_USE_MAX_KB 16
+
+# bootloader is installed at zero offset
+FLASH_RESERVE_START_KB 0
+
+# the location where the bootloader will put the firmware
+FLASH_BOOTLOADER_LOAD_KB 128
+#env OPTIMIZE -Os
+# USB
+USB_STRING_MANUFACTURER "X27Tek"
+
+# baudrate to run bootloader at on uarts
+#define BOOTLOADER_BAUDRATE 115200
+define STM32_SERIAL_USE_USART1 TRUE
+define HAL_USE_SERIAL TRUE
+
+# uarts and USB to run bootloader protocol on
+SERIAL_ORDER OTG1 USART1
+
+# this is the pin that senses USB being connected. It is an input pin
+# setup as OPENDRAIN
+#PA9 VBUS INPUT OPENDRAIN
+
+# now we define the pins that USB is connected on
+PA11 OTG_HS_DM OTG1
+PA12 OTG_HS_DP OTG1
+
+# pins for SWD debugging
+PA13 JTMS-SWDIO SWD
+PA14 JTCK-SWCLK SWD
+
+# CAN bus
+#PD0  CAN1_RX CAN1
+#PD1  CAN1_TX CAN1
+
+# USART1 is debug
+PA9 USART1_TX USART1
+PA10 USART1_RX USART1
