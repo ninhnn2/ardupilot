@@ -140,30 +140,63 @@
 #define STM32_PLLSRC                        STM32_PLLSRC_HSE_CK
 #define STM32_CKPERSEL                      STM32_CKPERSEL_HSE_CK
 
+#elif STM32_HSECLK == 25000000U
+// this gives 550MHz system clock
+#define STM32_HSE_ENABLED                   TRUE
+#define STM32_HSI_ENABLED                   FALSE
+#define STM32_PLL1_DIVM_VALUE               2
+#define STM32_PLL2_DIVM_VALUE               2
+#define STM32_PLL3_DIVM_VALUE               2
+#define STM32_PLLSRC                        STM32_PLLSRC_HSE_CK
+#define STM32_CKPERSEL                      STM32_CKPERSEL_HSE_CK
+
 #else
 #error "Unsupported HSE clock"
 #endif
 
-#if (STM32_HSECLK == 0U) || (STM32_HSECLK == 8000000U) || (STM32_HSECLK == 16000000U)
+#if (STM32_HSECLK == 0U) || (STM32_HSECLK == 8000000U) || \
+    (STM32_HSECLK == 16000000U) || (STM32_HSECLK == 25000000U)
 // common clock tree for multiples of 8MHz crystals
 #ifdef HAL_CUSTOM_MCU_CLOCKRATE
+#define STM32_PLL3_DIVP_VALUE               1
+
 #if HAL_CUSTOM_MCU_CLOCKRATE == 520000000
 #define STM32_PLL1_DIVN_VALUE               260
 #define STM32_PLL1_DIVP_VALUE               1
 #define STM32_PLL1_DIVQ_VALUE               6
 
-#define STM32_PLL3_DIVP_VALUE               1
+#elif HAL_CUSTOM_MCU_CLOCKRATE == 550000000
+#define STM32_PLL1_DIVN_VALUE               44
+#define STM32_PLL1_DIVP_VALUE               1
+#define STM32_PLL1_DIVQ_VALUE               40
+
 #else
 #error "Unable to configure custom clockrate"
 #endif
+
 #else // these downclock to a system clock of 400Mhz
+
 #define STM32_PLL1_DIVN_VALUE               200
 #define STM32_PLL1_DIVP_VALUE               1
 #define STM32_PLL1_DIVQ_VALUE               6
 
 #define STM32_PLL3_DIVP_VALUE               2
-#endif
+#endif /* HAL_CUSTOM_MCU_CLOCKRATE */
 
+#if defined(HAL_CUSTOM_MCU_CLOCKRATE) && \
+    HAL_CUSTOM_MCU_CLOCKRATE == 550000000
+#define STM32_PLL1_DIVR_VALUE               2
+
+#define STM32_PLL2_DIVN_VALUE               32
+#define STM32_PLL2_DIVP_VALUE               3
+#define STM32_PLL2_DIVQ_VALUE               5
+#define STM32_PLL2_DIVR_VALUE               4
+
+#define STM32_PLL3_DIVN_VALUE               32
+#define STM32_PLL3_DIVQ_VALUE               5
+#define STM32_PLL3_DIVR_VALUE               4
+
+#else
 #define STM32_PLL1_DIVR_VALUE               4
 
 #define STM32_PLL2_DIVN_VALUE               400
@@ -174,6 +207,7 @@
 #define STM32_PLL3_DIVN_VALUE               192
 #define STM32_PLL3_DIVQ_VALUE               2
 #define STM32_PLL3_DIVR_VALUE               4
+#endif /* HAL_CUSTOM_MCU_CLOCKRATE == 550000000 */
 #endif // clock selection
 
 /*
@@ -234,7 +268,7 @@
 #define STM32_STOPKERWUCK                   0
 #define STM32_STOPWUCK                      0
 #define STM32_RTCPRE_VALUE                  2
-#define STM32_SDMMCSEL                      STM32_SDMMCSEL_PLL1_Q_CK
+#define STM32_SDMMCSEL                      STM32_SDMMCSEL_PLL2_R_CK
 #define STM32_OCTOSPISEL                    STM32_OCTOSPISEL_HCLK
 #define STM32_FMCSEL                        STM32_OCTOSPISEL_HCLK
 
