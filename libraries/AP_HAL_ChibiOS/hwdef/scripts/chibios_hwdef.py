@@ -2310,6 +2310,7 @@ INCLUDE common.ld
         adc_chans = [[], [], []]
         analogset = {252, 253, 254} # reserved values for VSENSE, VREF and VBAT in H7
         for label in self.bylabel:
+            #print("label: " + label)
             p = self.bylabel[label]
             if not p.type.startswith('ADC'):
                 continue
@@ -2335,6 +2336,7 @@ INCLUDE common.ld
             if p.label == 'FMU_SERVORAIL_VCC_SENS':
                 f.write('#define FMU_SERVORAIL_ADC_PIN %u\n' % (analog))
                 f.write('#define HAL_HAVE_SERVO_VOLTAGE 1\n')
+            #print("index: " + str(index))
             adc_chans[index].append((chan, analog, scale, p.label, p.portpin))
 
         # sort by ADC channel
@@ -2387,6 +2389,7 @@ INCLUDE common.ld
                         (chan, analog, scale_str, portpin, label))
             f.write('\n\n')
         if len(adc_chans[2]) > 0:
+            #print("Is ADC3 used????")
             f.write('#define STM32_ADC_USE_ADC3 TRUE\n')
             f.write('#define HAL_ANALOG3_PINS \\\n')
             for (chan, analog, scale, label, portpin) in adc_chans[2]:
